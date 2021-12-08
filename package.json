@@ -1,12 +1,16 @@
 {
   "name": "commands-not-found",
   "version": "0.0.1",
-  "description": "",
-  "bin": "index.js",
+  "description": "A CLI that shows install instructions for unrecognized commands across several Linux distributions",
+  "bin": "bin.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zbo14/commands-not-found"
+  },
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap test.js"
   },
   "keywords": [
     "axios",
@@ -24,6 +28,7 @@
     "getopts": "^2.3.0"
   },
   "devDependencies": {
-    "standard": "^16.0.4"
+    "standard": "^16.0.4",
+    "tap": "^15.1.5"
   }
 }

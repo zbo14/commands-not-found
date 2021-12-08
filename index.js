@@ -1,10 +1,7 @@
-#!/usr/bin/env node
-
 'use strict'
 
 const axios = require('axios')
 const cheerio = require('cheerio')
-const getopts = require('getopts')
 const os = require('os')
 
 const DISTROS = [
@@ -17,14 +14,10 @@ const DISTROS = [
   'ubuntu'
 ]
 
-const main = async () => {
-  const uname = (os.release() + ' ' + os.version()).toLowerCase()
+const URL_PREFIX = 'https://command-not-found.com/'
 
-  let { _: cmds, d: distro = '' } = getopts(process.argv.slice(2), {
-    alias: {
-      distro: ['d']
-    }
-  })
+module.exports = async (cmds, { distro = '' } = {}) => {
+  const uname = (os.release() + ' ' + os.version()).toLowerCase()
 
   distro = (
     distro.trim().toLowerCase() ||
@@ -35,8 +28,8 @@ const main = async () => {
     throw new Error('Unrecognized distro: ' + distro)
   }
 
-  const promises = cmds.map(async cmd => {
-    const resp = await axios.get('https://command-not-found.com/' + cmd)
+  const promises = [].concat(cmds).map(async cmd => {
+    const resp = await axios.get(URL_PREFIX + cmd)
     const $ = cheerio.load(resp.data)
 
     const el = $('.command-install').filter((_, el) => {
@@ -66,16 +59,8 @@ const main = async () => {
 
   const installCmds = await Promise.all(promises)
   const prefix = installCmds[0].split(' ').slice(0, -1).join(' ')
+  const uniqueCmds = new Set(installCmds.map(cmd => cmd.split(' ').pop()))
+  const result = [prefix, ...uniqueCmds].join(' ')
 
-  const result = [
-    prefix,
-    ...installCmds.map(cmd => cmd.split(' ').pop())
-  ].join(' ')
-
-  console.log(result)
+  return result
 }
-
-main().catch(err => {
-  console.error(err.message)
-  process.exit(1)
-})
