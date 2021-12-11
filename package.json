@@ -1,6 +1,6 @@
 {
   "name": "commands-not-found",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A CLI that shows install instructions for unrecognized commands across several Linux distributions",
   "bin": "bin.js",
   "repository": {
@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "tap test.js"
+    "test": "tap test/index.js"
   },
   "keywords": [
     "axios",

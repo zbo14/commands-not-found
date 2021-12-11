@@ -2,6 +2,7 @@
 
 const axios = require('axios')
 const cheerio = require('cheerio')
+const fs = require('fs')
 const os = require('os')
 
 const DISTROS = [
@@ -17,6 +18,7 @@ const DISTROS = [
 const URL_PREFIX = 'https://command-not-found.com/'
 
 module.exports = async (cmds, { distro = '' } = {}) => {
+  cmds = [].concat(cmds)
   const uname = (os.release() + ' ' + os.version()).toLowerCase()
 
   distro = (
@@ -28,7 +30,12 @@ module.exports = async (cmds, { distro = '' } = {}) => {
     throw new Error('Unrecognized distro: ' + distro)
   }
 
-  const promises = [].concat(cmds).map(async cmd => {
+  if (cmds[0][0] === '@') {
+    const data = await fs.promises.readFile(cmds[0].slice(1), 'utf8')
+    cmds = data.split('\n').filter(Boolean)
+  }
+
+  const promises = cmds.map(async cmd => {
     const resp = await axios.get(URL_PREFIX + cmd)
     const $ = cheerio.load(resp.data)
 

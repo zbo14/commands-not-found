@@ -42,6 +42,22 @@ output: "pacman -S bind-tools"
 
 output: "pacman -S bind-tools nmap" (`ncat` is part of `nmap`)
 
+**Show install instructions for commands in a file:**
+
+*commands.txt:*
+
+```
+dig
+ncat
+nmap
+socat
+unbound
+```
+
+`commands-not-found -d arch @commands.txt`
+
+output: "pacman -S bind-tools nmap socat unbound"
+
 ## Test
 
 `npm test`

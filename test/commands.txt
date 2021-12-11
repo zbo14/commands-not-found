@@ -1,0 +1,5 @@
+dig
+ncat
+nmap
+socat
+unbound
