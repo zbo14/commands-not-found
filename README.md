@@ -18,13 +18,13 @@ Results are pulled from [command-not-found](https://command-not-found.com). In a
 
 `commands-not-found dig`
 
-output: "apt-get install knot-dnsutils" (on Ubuntu)
+stdout: "apt-get install knot-dnsutils" (on Ubuntu)
 
 **Show install instructions for command on specific distro:**
 
 `commands-not-found -d arch dig` or `commands-not-found --distro arch dig`
 
-output: "pacman -S bind-tools"
+stdout: "pacman -S bind-tools"
 
 *Supported distros:*
 
@@ -40,7 +40,7 @@ output: "pacman -S bind-tools"
 
 `commands-not-found -d arch dig ncat nmap`
 
-output: "pacman -S bind-tools nmap" (`ncat` is part of `nmap`)
+stdout: "pacman -S bind-tools nmap" (`ncat` is part of `nmap`)
 
 **Show install instructions for commands in a file:**
 
@@ -56,7 +56,19 @@ unbound
 
 `commands-not-found -d arch @commands.txt`
 
-output: "pacman -S bind-tools nmap socat unbound"
+stdout: "pacman -S bind-tools nmap socat unbound"
+
+**Exit with error if command not found:**
+
+`commands-not-found -e zzz dig ncat nmap`
+
+stdout: ""
+stderr: "Command not found: zzz"
+
+Without the `-e` flag, `commands-not-found` logs the error and install instructions for other commands:
+
+stdout: "pacman -S bind-tools nmap"
+stderr: "Command not found: zzz"
 
 ## Test
 

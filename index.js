@@ -17,7 +17,10 @@ const DISTROS = [
 
 const URL_PREFIX = 'https://command-not-found.com/'
 
-module.exports = async (cmds, { distro = '' } = {}) => {
+module.exports = async (cmds, {
+  distro = '',
+  exitOnError = false
+} = {}) => {
   cmds = [].concat(cmds)
   const uname = (os.release() + ' ' + os.version()).toLowerCase()
 
@@ -57,14 +60,21 @@ module.exports = async (cmds, { distro = '' } = {}) => {
       .text()
       .trim()
 
-    if (!installCmd) {
-      throw new Error('Command not found: ' + cmd)
+    if (installCmd) return installCmd
+
+    const err = new Error('Command not found: ' + cmd)
+
+    if (exitOnError) {
+      throw err
     }
 
-    return installCmd
+    console.error(err)
   })
 
-  const installCmds = await Promise.all(promises)
+  const installCmds = (await Promise.all(promises)).filter(Boolean)
+
+  if (!installCmds.length) return ''
+
   const prefix = installCmds[0].split(' ').slice(0, -1).join(' ')
   const uniqueCmds = new Set(installCmds.map(cmd => cmd.split(' ').pop()))
   const result = [prefix, ...uniqueCmds].join(' ')

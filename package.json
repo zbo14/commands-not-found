@@ -1,6 +1,6 @@
 {
   "name": "commands-not-found",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A CLI that shows install instructions for unrecognized commands across several Linux distributions",
   "bin": "bin.js",
   "repository": {
